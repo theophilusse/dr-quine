@@ -6,27 +6,9 @@ COLLEEN = Colleen
 GRACE = Grace
 SULLY = Sully
 
-UNAME := $(shell uname)
-ifeq ($(UNAME), Darwin)
-	ifneq ($(wildcard /opt/homebrew/bin/x86_64-elf-as),)
-		ASM = /opt/homebrew/bin/x86_64-elf-as
-		LD  = /opt/homebrew/bin/x86_64-elf-ld
-	else ifneq ($(wildcard /usr/local/bin/x86_64-elf-as),)
-		ASM = /usr/local/bin/x86_64-elf-as
-		LD  = /usr/local/bin/x86_64-elf-ld
-	else
-		$(error "GNU as not found. Run: brew install x86_64-elf-binutils")
-	endif
-	ASMFLAGS = --64
-	# Link ELF object with GNU ld, using libgcc + libc from the cross toolchain
-	LIBC     := $(shell $(CC) -print-file-name=libc.a 2>/dev/null)
-	LIBGCC   := $(shell $(CC) -print-libgcc-file-name 2>/dev/null)
-	LINK_ASM  = $(LD) -o $@ $^ $(LIBGCC) $(LIBC) --dynamic-linker /lib64/ld-linux-x86-64.so.2
-else
-	ASM      = as
-	ASMFLAGS =
-	LINK_ASM  = $(CC) -o $@ $^ -lc
-endif
+ASM      = as
+ASMFLAGS =
+LINK_ASM  = $(CC) -o $@ $^ -lc
 
 all: obj $(COLLEEN) $(GRACE) $(SULLY) tool
 
