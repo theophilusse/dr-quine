@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 SRC = Colleen.c Grace.c Sully.c
-OBJ = $(SRC:.c=.o)
+OBJ = $(SRC:%.c=obj/%.o)
 COLLEEN = Colleen
 GRACE = Grace
 SULLY = Sully
@@ -28,30 +28,32 @@ else
 	LINK_ASM  = $(CC) -o $@ $^ -lc
 endif
 
-all: $(COLLEEN) $(GRACE) $(SULLY) tool
+all: obj $(COLLEEN) $(GRACE) $(SULLY) tool
 
-$(COLLEEN): Colleen.o
-	$(CC) $(CFLAGS) -o c/$@ $^
-	$(ASM) $(ASMFLAGS) -o Colleen.o Colleen.s
-	$(LINK_ASM)
+obj:
+	mkdir -p obj
 
-$(GRACE): Grace.o
+$(COLLEEN): obj/Colleen.o
 	$(CC) $(CFLAGS) -o c/$@ $^
-	$(ASM) $(ASMFLAGS) -o Grace.o Grace.s
-	$(LINK_ASM)
+	$(ASM) $(ASMFLAGS) -o obj/$@_asm.o Colleen.s
+	$(CC) -o asm/$@ obj/$@_asm.o -lc
 
-$(SULLY): Sully.o
+$(GRACE): obj/Grace.o
 	$(CC) $(CFLAGS) -o c/$@ $^
-	$(ASM) $(ASMFLAGS) -o Sully.o Sully.s
-	$(LINK_ASM)
+	$(ASM) $(ASMFLAGS) -o obj/$@_asm.o Grace.s
+	$(CC) -o asm/$@ obj/$@_asm.o -lc
+
+$(SULLY): obj/Sully.o
+	$(CC) $(CFLAGS) -o c/$@ $^
+	$(ASM) $(ASMFLAGS) -o obj/$@_asm.o Sully.s
+	$(CC) -o asm/$@ obj/$@_asm.o -lc
 
 tool:
 	$(CC) -o tool/generate tool/generate.c
 	$(CC) -o tool/generate_asm tool/generate_asm.c
 
 clean:
-	rm -f *.o
-	rm -f asm/*.o
+	rm -rf obj
 
 fclean: clean killkid
 	rm -f c/$(COLLEEN) c/$(GRACE) c/$(SULLY)
@@ -69,7 +71,7 @@ killkid:
 
 re: fclean all
 
-%.o: %.c
+obj/%.o: %.c | obj
 	$(CC) $(CFLAGS) -c $< -o $@
 
-.PHONY: all tool clean fclean killkid re
+.PHONY: all obj tool clean fclean killkid re

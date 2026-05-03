@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-char code[] = "#";
+char code[] = "$";
 
 char buf[123456];
 
@@ -79,7 +79,7 @@ void display(char *s)
 {
 	while (*s)
 	{
-		if (*s == 35)
+		if (*s == 36)
 			display_code();
 		else
 			concat(s, 1);

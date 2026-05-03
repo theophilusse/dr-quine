@@ -20,21 +20,29 @@ void concat(char *s, int len)
 
 void itoa(char *dst, int num)
 {
-	if (num < 0)
+    char tmp[32];
+    int  i;
+    int  j;
+
+    i = 0;
+    if (num < 0)
 	{
-		num *= -1;
 		*(dst++) = '-';
+		num = -num;
 	}
-	if (num == 0)
-		*(dst++) = '0';
-	while (num != 0)
+    if (num == 0)
 	{
-		*(dst++) = (num % 10) + '0';
-		if (num == 0)
-			break;
-		num /= 10;
+		*(dst++) = '0'; *dst = '\0';
+		return;
 	}
-	*dst = '\0';
+    while (num > 0)
+	{
+		tmp[i++] = (num % 10) + '0'; num /= 10;
+	}
+    j = 0;
+    while (i > 0)
+		dst[j++] = tmp[--i];
+    dst[j] = '\0';
 }
 
 int my_strlen(char *s)
@@ -53,10 +61,10 @@ void display_code()
 	int i;
 
 	c = code;
-	//concat("\t.align 32\n", 11);
-	//concat("\t.type\tcode, @object\n", 21);
-	//concat("\t.size\tcode, 1234566\n", 21);
-	//concat("code:\n", 6);
+	concat("\t.align 32\n", 11);
+	concat("\t.type\tcode, @object\n", 21);
+	concat("\t.size\tcode, 1234566\n", 21);
+	concat("code:\n", 6);
 	i = 0;
 	while (*c)
 	{
@@ -105,7 +113,7 @@ void display(char *s, int gen)
 
 	while (*s)
 	{
-		if (*s == 35)
+		if (*s == 36)
 			display_code();
 		else if (*s == 63)
 		{

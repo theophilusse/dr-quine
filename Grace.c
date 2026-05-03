@@ -1,7 +1,9 @@
 #include <stdio.h>
-#define FT() int main() {display(code);export(buf);return (0);}
+#define FT() int main() {/* comment */display(code);export(buf);return (0);}
 
-char code[] = "#include <stdio.h>\n#define FT() int main() {display(code);export(buf);return (0);}\n\nchar code[] = \"@\";\n\nchar buf[12345];\n\nvoid concat(char *s, int len)\n{\n\tstatic int p = 0;\n\n\twhile (*s && len--)\n\t\tbuf[p++] = *(s++);\n\tbuf[p] = '\\0';\n}\n\nvoid display_code()\n{\n\tchar *c;\n\n\tc = code;\n\twhile (*c)\n\t{\n\t\tif (*c == '\"')\n\t\t{\n\t\t\tconcat(\"\\\\\\\"\", 2);\n\t\t\tc++;\n\t\t}\n\t\telse if (*c == '\\n')\n\t\t{\n\t\t\tconcat(\"\\\\n\", 2);\n\t\t\tc++;\n\t\t}\n\t\telse if (*c == '\\t')\n\t\t{\n\t\t\tconcat(\"\\\\t\", 2);\n\t\t\tc++;\n\t\t}\n\t\telse if (*c == '\\\\')\n\t\t{\n\t\t\tconcat(\"\\\\\\\\\", 2);\n\t\t\tc++;\n\t\t}\n\t\telse\n\t\t{\n\t\t\tconcat(c, 1);\n\t\t\tc++;\n\t\t}\n\t}\n}\n\nvoid display(char *s)\n{\n\twhile (*s)\n\t{\n\t\tif (*s == 64)\n\t\t\tdisplay_code();\n\t\telse\n\t\t\tconcat(s, 1);\n\t\ts++;\n\t}\n}\n\nvoid export(char *data)\n{\n\tFILE *file = fopen(\"Grace_kid.c\", \"w\");\n\tif (file == NULL)\n\t\treturn ;\n\tfprintf(file, \"%s\", data);\n\tfclose(file);\n}\n\nFT();";
+#define WRITE(f, d) fprintf(f, "%s", d)
+#define S "#include <stdio.h>\n#define FT() int main() {/* comment */display(code);export(buf);return (0);}\n\n#define WRITE(f, d) fprintf(f, \"%s\", d)\n#define S \"@\"\nchar code[] = S;\n\nchar buf[12345];\n\nvoid concat(char *s, int len)\n{\n\tstatic int p = 0;\n\n\twhile (*s && len--)\n\t\tbuf[p++] = *(s++);\n\tbuf[p] = '\\0';\n}\n\nvoid display_code()\n{\n\tchar *c;\n\n\tc = code;\n\twhile (*c)\n\t{\n\t\tif (*c == '\"')\n\t\t{\n\t\t\tconcat(\"\\\\\\\"\", 2);\n\t\t\tc++;\n\t\t}\n\t\telse if (*c == '\\n')\n\t\t{\n\t\t\tconcat(\"\\\\n\", 2);\n\t\t\tc++;\n\t\t}\n\t\telse if (*c == '\\t')\n\t\t{\n\t\t\tconcat(\"\\\\t\", 2);\n\t\t\tc++;\n\t\t}\n\t\telse if (*c == '\\\\')\n\t\t{\n\t\t\tconcat(\"\\\\\\\\\", 2);\n\t\t\tc++;\n\t\t}\n\t\telse\n\t\t{\n\t\t\tconcat(c, 1);\n\t\t\tc++;\n\t\t}\n\t}\n}\n\nvoid display(char *s)\n{\n\twhile (*s)\n\t{\n\t\tif (*s == 64)\n\t\t\tdisplay_code();\n\t\telse\n\t\t\tconcat(s, 1);\n\t\ts++;\n\t}\n}\n\nvoid export(char *data)\n{\n\tFILE *file = fopen(\"Grace_kid.c\", \"w\");\n\tif (file == NULL)\n\t\treturn ;\n\tWRITE(file, data);\n\tfclose(file);\n}\n\nFT();"
+char code[] = S;
 
 char buf[12345];
 
@@ -66,7 +68,7 @@ void export(char *data)
 	FILE *file = fopen("Grace_kid.c", "w");
 	if (file == NULL)
 		return ;
-	fprintf(file, "%s", data);
+	WRITE(file, data);
 	fclose(file);
 }
 

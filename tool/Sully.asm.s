@@ -5,8 +5,8 @@
 	.globl	code
 	.data
 	.align 32
-	.type	code, @object
-	.size	code, 1234566
+	.type   code, @object
+	.size   code, 12085
 code:
 	.ascii "# i = 5\n\t.file\t\"Sully.asm.c\"\n\t.intel_syntax nopref"
 	.ascii "ix\n\t.text\n\t.globl\tcode\n\t.data\n$\n\t.globl\tisnotroot\n"
@@ -250,7 +250,6 @@ code:
 	.ascii "8\n\t.long\t1f - 0f\n\t.long\t4f - 1f\n\t.long\t5\n0:\n\t.stri"
 	.ascii "ng\t\"GNU\"\n1:\n\t.align 8\n\t.long\t0xc0000002\n\t.long\t3f "
 	.string "- 2f\n2:\n\t.long\t0x3\n3:\n\t.align 8\n4:\n"
-
 	.globl	isnotroot
 	.type	isnotroot, @object
 	.size	isnotroot, 1

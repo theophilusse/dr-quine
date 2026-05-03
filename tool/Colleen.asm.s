@@ -4,8 +4,8 @@
 	.globl	code
 	.data
 	.align 32
-	.type	code, @object
-	.size	code, 1234566
+	.type   code, @object
+	.size   code, 5394
 code:
 	.ascii "\t.file\t\"Colleen.asm.c\"\n\t.intel_syntax noprefix\n\t.t"
 	.ascii "ext\n\t.globl\tcode\n\t.data\n$\n\t.globl\tbuf\n\t.bss\n\t.alig"
@@ -115,7 +115,6 @@ code:
 	.ascii "\n\t.align 8\n\t.long\t1f - 0f\n\t.long\t4f - 1f\n\t.long\t5\n"
 	.ascii "0:\n\t.string\t\"GNU\"\n1:\n\t.align 8\n\t.long\t0xc0000002\n\t"
 	.string ".long\t3f - 2f\n2:\n\t.long\t0x3\n3:\n\t.align 8\n4:\n"
-
 	.globl	buf
 	.bss
 	.align 32
