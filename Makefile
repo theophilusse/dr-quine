@@ -50,6 +50,8 @@ killkid:
 	rm -f asm/Sully_*
 	rm -f c/Grace_kid*
 	rm -f c/Sully_*
+	rm -f python/Grace_kid.py
+	rm -f python/Sully_*.py
 
 re: fclean all
 
